@@ -1,0 +1,17 @@
+{% extends "base.html" %}{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4"><div><h1 class="h2 mb-1">Dashboard</h1><div class="text-muted">Your CRM overview</div></div><span class="badge text-bg-primary">{{current_user.role}}</span></div>
+<div class="row g-3 mb-4">
+{% for label,value in [('Customers',counts.Customer),('Leads',counts.Lead),('Opportunities',counts.Opportunity),('Follow-ups',counts.FollowUp),('Activities',counts.Activity),('Open pipeline', '₹' ~ '{:,.0f}'.format(pipeline))] %}
+<div class="col-6 col-md-4 col-xl-2"><div class="card metric-card h-100"><div class="card-body"><div class="text-muted small">{{label}}</div><div class="h3 mb-0">{{value}}</div></div></div></div>
+{% endfor %}
+</div>
+<div class="row g-4"><div class="col-lg-6"><div class="card h-100"><div class="card-body"><h5>Lead status</h5><canvas id="leadChart"></canvas></div></div></div>
+<div class="col-lg-6"><div class="card h-100"><div class="card-body"><h5>Opportunity pipeline</h5><canvas id="oppChart"></canvas></div></div></div></div>
+<div class="card mt-4"><div class="card-body"><h5>Upcoming follow-ups</h5>
+{% if upcoming %}<div class="table-responsive"><table class="table"><thead><tr><th>Subject</th><th>Related to</th><th>Date</th><th>Status</th></tr></thead><tbody>{% for f in upcoming %}<tr><td>{{f.subject}}</td><td>{{f.related_to or '—'}}</td><td>{{f.follow_up_date}}</td><td>{{f.status}}</td></tr>{% endfor %}</tbody></table></div>{% else %}<p class="text-muted mb-0">No upcoming follow-ups.</p>{% endif %}
+</div></div>
+<script>
+new Chart(document.getElementById('leadChart'),{type:'doughnut',data:{labels:{{lead_statuses|tojson}},datasets:[{data:{{lead_counts|tojson}}}]}});
+new Chart(document.getElementById('oppChart'),{type:'bar',data:{labels:{{stages|tojson}},datasets:[{label:'Opportunities',data:{{stage_counts|tojson}}}]}},options:{scales:{y:{beginAtZero:true}}}});
+</script>
+{% endblock %}

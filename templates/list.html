@@ -1,0 +1,10 @@
+{% extends "base.html" %}{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3"><div><h1 class="h2 mb-0">{{cfg.title}}</h1><div class="text-muted">Search and manage your {{cfg.title|lower}}</div></div><a class="btn btn-primary" href="{{url_for('create_resource',key=key)}}">+ Add {{cfg.title[:-1]}}</a></div>
+<form class="row g-2 mb-3"><div class="col-sm-5"><input class="form-control" name="q" value="{{term}}" placeholder="Search {{cfg.title|lower}}..."></div><div class="col-auto"><button class="btn btn-outline-secondary">Search</button><a class="btn btn-light" href="{{url_for('list_resource',key=key)}}">Clear</a></div></form>
+<div class="card"><div class="table-responsive"><table class="table table-hover align-middle mb-0"><thead><tr><th>ID</th>{% for f in cfg.fields %}<th>{{f[1]}}</th>{% endfor %}<th>Owner</th><th>Actions</th></tr></thead><tbody>
+{% for r in records %}<tr><td>{{r.id}}</td>{% for f in cfg.fields %}<td>{{ getattr(r,f[0]) if false else '' }}{% if f[2]=='date' %}{{r|attr(f[0])}}{% else %}{{r|attr(f[0])}}{% endif %}</td>{% endfor %}
+<td>{{(r.owner_id|string)}}</td><td class="text-nowrap"><a class="btn btn-sm btn-outline-primary" href="{{url_for('edit_resource',key=key,record_id=r.id)}}">Edit</a>
+{% if current_user.role == 'Admin' %}<form class="d-inline" method="post" action="{{url_for('delete_resource',key=key,record_id=r.id)}}" onsubmit="return confirm('Delete this record?')"><input type="hidden" name="csrf_token" value="{{csrf_token()}}"><button class="btn btn-sm btn-outline-danger">Delete</button></form>{% endif %}</td></tr>
+{% else %}<tr><td colspan="{{cfg.fields|length+3}}" class="text-center text-muted py-4">No records found. Add your first record.</td></tr>{% endfor %}
+</tbody></table></div></div>
+{% endblock %}

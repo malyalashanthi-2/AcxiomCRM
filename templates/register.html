@@ -1,0 +1,6 @@
+{% extends "base.html" %}{% block content %}<div class="auth-card card shadow-sm mx-auto"><div class="card-body p-4">
+<h2>Create account</h2><p class="text-muted">New accounts receive the Sales Executive role.</p>
+<form method="post">{{ form.hidden_tag() }}
+{% for field in [form.name,form.email,form.password] %}<div class="mb-3">{{field.label(class="form-label")}}{{field(class="form-control")}}{% for e in field.errors %}<div class="text-danger small">{{e}}</div>{% endfor %}</div>{% endfor %}
+{{form.submit(class="btn btn-primary w-100")}}</form><p class="mt-3"><a href="{{url_for('login')}}">Back to login</a></p>
+</div></div>{% endblock %}

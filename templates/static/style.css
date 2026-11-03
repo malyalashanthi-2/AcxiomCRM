@@ -1,0 +1,8 @@
+body { background: #f5f7fb; color: #1f2937; }
+.navbar-brand { letter-spacing: .3px; }
+.card { border: 1px solid #e7ebf2; border-radius: 12px; }
+.metric-card { border-left: 4px solid #4263eb; }
+.auth-card { max-width: 440px; margin-top: 4vh; border: 0; }
+.table thead th { background: #f8fafc; color: #475569; font-size: .85rem; white-space: nowrap; }
+.btn { border-radius: 8px; }
+.form-control, .form-select { border-radius: 8px; }
